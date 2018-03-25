@@ -1,5 +1,6 @@
 package pl.brawanski.bibliotekaspring.utils;
 
+import org.springframework.stereotype.Service;
 import pl.brawanski.bibliotekaspring.model.Order;
 import pl.brawanski.bibliotekaspring.model.Publication;
 import pl.brawanski.bibliotekaspring.model.User;
@@ -7,6 +8,7 @@ import pl.brawanski.bibliotekaspring.model.User;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+@Service
 public class DataReader {
     private Scanner sc;
 

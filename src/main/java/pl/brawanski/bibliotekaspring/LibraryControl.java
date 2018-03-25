@@ -1,6 +1,7 @@
 package pl.brawanski.bibliotekaspring;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.brawanski.bibliotekaspring.dao.OrderDao;
 import pl.brawanski.bibliotekaspring.dao.PublicationDao;
 import pl.brawanski.bibliotekaspring.dao.UserDao;
@@ -8,11 +9,13 @@ import pl.brawanski.bibliotekaspring.model.Order;
 import pl.brawanski.bibliotekaspring.model.Publication;
 import pl.brawanski.bibliotekaspring.model.User;
 import pl.brawanski.bibliotekaspring.utils.DataReader;
+
+
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-
+@Service
 public class LibraryControl {
 
     private DataReader dataReader;
@@ -22,8 +25,8 @@ public class LibraryControl {
 
 
     @Autowired
-    public LibraryControl(UserDao userDao, OrderDao orderDao, PublicationDao publicationDao) {
-        dataReader = new DataReader();
+    public LibraryControl(UserDao userDao, OrderDao orderDao, PublicationDao publicationDao,DataReader dataReader) {
+        this.dataReader = dataReader;
         this.userDao = userDao;
         this.orderDao = orderDao;
         this.publicationDao = publicationDao;
@@ -103,8 +106,7 @@ public class LibraryControl {
         Order order = dataReader.readAndCreateOrder();
         System.out.println("Podaj pesel użytkownika do którego chcesz przypisać zamówienie: ");
         String pesel = dataReader.readPesel();
-        Long id = userDao.getIdByPesel(pesel);
-        User user = userDao.get(id);
+        User user = userDao.getUserByPesel(pesel);
         orderDao.save(order);
         user.setOrder(order);
         userDao.update(user);
@@ -120,8 +122,7 @@ public class LibraryControl {
     private void borrowPublication(){
         String pesel = dataReader.readPesel();
         String title = dataReader.readTitle();
-        Long idUser = userDao.getIdByPesel(pesel);
-        User user = userDao.get(idUser);
+        User user = userDao.getUserByPesel(pesel);
         Long idPub = publicationDao.getIdByTitle(title);
         Publication pub = publicationDao.get(idPub);
         orderDao.addPublicationToOrder(user.getOrder().getId(),pub);
@@ -129,8 +130,7 @@ public class LibraryControl {
 
     private void printBorrowed(){
         String pesel = dataReader.readPesel();
-        Long idUser = userDao.getIdByPesel(pesel);
-        User user = userDao.get(idUser);
+        User user = userDao.getUserByPesel(pesel);
         user.getOrder().getPublications().forEach(System.out::println);
     }
 

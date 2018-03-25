@@ -36,12 +36,12 @@ public class UserDao {
         entityManager.remove(user);
     }
 
-    public Long getIdByPesel(String pesel){
+    public User getUserByPesel(String pesel){
         final String get = "SELECT u FROM User u WHERE u.pesel = :pesel";
         TypedQuery<User> query = entityManager.createQuery(get, User.class);
         query.setParameter("pesel", pesel);
         User user = query.getSingleResult();
-        return user.getId();
+        return user;
     }
 
     public List<User> getAll(){

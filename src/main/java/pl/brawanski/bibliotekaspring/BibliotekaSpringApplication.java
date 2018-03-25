@@ -18,10 +18,7 @@ public class BibliotekaSpringApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext ctx = SpringApplication.run(BibliotekaSpringApplication.class, args);
-		OrderDao orderDao = ctx.getBean(OrderDao.class);
-		UserDao userDao = ctx.getBean(UserDao.class);
-		PublicationDao publicationDao = ctx.getBean(PublicationDao.class);
-		LibraryControl control = new LibraryControl(userDao,orderDao,publicationDao);
+		LibraryControl control = ctx.getBean(LibraryControl.class);
 		control.controlLoop();
 		ctx.close();
 	}
